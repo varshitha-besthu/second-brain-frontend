@@ -14,6 +14,5 @@ export const useContent = () => {
             setContents(response.data.content)
         })
     })
-
     return contents;
 }

@@ -29,7 +29,7 @@ export const Card = (Props: CardProps) => {
                         {Props.title}
                     </div>
                     <div className="flex items-center text-gray-500">   
-                        <div className="pr-4" >
+                        <div className="pointer pr-4">
                             <a href= {Props.link} target = "_blank"></a>
                             <ShareIcon />
                         </div>
