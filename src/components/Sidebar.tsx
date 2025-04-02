@@ -1,3 +1,5 @@
+import { DocumentIcon } from "../icons/DocumentIcon"
+import { LinkIcon } from "../icons/linkIcon"
 import { Logo } from "../icons/Logo"
 import { TwitterIcon } from "../icons/TwitterIcon"
 import { YouTubeIcon } from "../icons/YouTubeIcon"
@@ -15,7 +17,8 @@ export const SideBar = () => {
             <div className="pt-4 pl-4" >
                 <SideBarItem text="Tweets" icon={<TwitterIcon />} />
                 <SideBarItem text="Youtube" icon={<YouTubeIcon />} />
-
+                <SideBarItem text="Documents" icon={<DocumentIcon />} />
+                <SideBarItem text="Links" icon = {<LinkIcon />} />
             </div>
          </div>
     )
