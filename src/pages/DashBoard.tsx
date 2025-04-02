@@ -14,6 +14,13 @@ export function DashBoard() {
   const [modelOpen, setModelOpen] = useState(false);
   const contents = useContent();
 
+  const handleDelete = async(_id :string) => {
+    await axios.delete(`${BACKEND_URL}/api/v1/content`,  
+    {headers : {
+      "Authorization" : localStorage.getItem("token")
+    }, data : {contentId : _id}}, )
+  }
+
   return (
     <div>
       <SideBar />
@@ -35,11 +42,16 @@ export function DashBoard() {
           }}/>
         </div>
         <div className="flex gap-4 flex-wrap">
-          {/* <Card type="twitter" link="https://x.com/AkshitVig4/status/1903170102167789886" title="First tweet" />
-          <Card type="youtube" link="https://www.youtube.com/watch?v=rTpm33Xyjn4" title="First video" /> */}
-          {contents.map(({title, link, type}) => 
-             <Card type = {type} link= {link} title= {title} />
-          )}
+        {contents.map(({ _id, title, link, type }) => (
+            <Card 
+              key={_id}
+              _id = {_id}
+              type={type} 
+              link={link} 
+              title={title} 
+              onDelete={handleDelete}
+            />
+          ))}
         </div>
       </div>
     </div>

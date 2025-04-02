@@ -2,13 +2,22 @@
 import { ShareIcon } from "../icons/ShareIcon"
 import { DeleteIcon } from "../icons/DeleteIcon"
 import { FileIcon } from "../icons/FileIcon"
+import TwitterEmbedBasic from "./tweetEmbed"
 
 interface CardProps {
+    _id: string
     title : string,
     link : string,
-    type : "twitter" | "youtube"
+    type : "tweets" | "videos" | "documents" | "links",
+    onDelete ?: (_id:string) => void
+
 }
 export const Card = (Props: CardProps) => {
+    const handleDeleteClick = () => {
+        if(Props.onDelete){
+            Props.onDelete(Props._id)
+        }
+    }
     return(
         <div >
             <div className="p-4 border bg-white rounded-md border-gray-200 max-w-72 min-h-48 min-w-72">
@@ -24,21 +33,22 @@ export const Card = (Props: CardProps) => {
                             <a href= {Props.link} target = "_blank"></a>
                             <ShareIcon />
                         </div>
-                        <div>
+                        <div onClick = {handleDeleteClick} className="pointer">
                             <DeleteIcon />
                         </div>
 
                     </div>
                 </div>
-
                 <div className="pt-4 ">
-                    {Props.type === "youtube" && 
+                    {/* YOUTUBE VIDEO */}
+                    {Props.type === "videos" && 
                     <iframe  className = "w-full" src={Props.link.replace("watch","embed").replace("?v=","/")} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe> }
-
-                    {Props.type === "twitter" && 
-                    <blockquote className="twitter-tweet">
-                        <a href={Props.link.replace("x.com","twitter.com")}></a> 
-                    </blockquote>}
+                    {/* TWITTER VIDEO */}
+                    {Props.type === "tweets" && 
+                     <TwitterEmbedBasic
+                     tweetUrl={Props.link} 
+                     className="my-tweet-embed"
+                   />}
                 </div>
                     
             </div>

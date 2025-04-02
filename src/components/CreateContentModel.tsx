@@ -6,25 +6,34 @@ import axios from "axios"
 import { BACKEND_URL } from "../config"
 
 enum ContentType {
-    Youtube = "youtube",
-    Twitter = "twitter"
+    Youtube = "videos",
+    Twitter = "tweets",
+    Documents = "documents",
+    Links = "links"
 }
 export const CreateContentModel = ({ open, onClose } : {open : any, onClose: any}) => {
     const titleRef = useRef<HTMLInputElement | null>(null);
     const linkRef = useRef<HTMLInputElement | null>(null);
+    const tagsRef = useRef<HTMLInputElement | null>(null);
+
     const [type, setType] = useState(ContentType.Youtube);
 
     async function contentModel() {
         const title = titleRef.current?.value;
         const link = linkRef.current?.value;
+        const tags = tagsRef.current?.value.split(",");
+        const tagArray = tags?.map(tag => ({"tagName" : tag} ));
+        console.log(tags);
         await axios.post(`${BACKEND_URL}/api/v1/content`, {
             title,
             link,
-            type
+            tags : tagArray,
+            type : type,
+            
         }, {headers : {
             "Authorization" : localStorage.getItem("token")
         }})
-        
+        console.log(tags);
         onClose();
         
     }
@@ -43,10 +52,13 @@ export const CreateContentModel = ({ open, onClose } : {open : any, onClose: any
                             <div>
                                 <Input placeholder={"Title"} ref={titleRef} />
                                 <Input placeholder={"Link"} ref={linkRef} />
+                                <Input placeholder="Enter tags by comma seperated value" ref={tagsRef} />
                             </div>
                             <div className="flex gap-2 p-4">
                                 <Button text="Youtube" variant={type == ContentType.Youtube ? "primary" : "secondary"} onClick={() => { setType(ContentType.Youtube) }} />
                                 <Button text="Twitter" variant={type == ContentType.Twitter ? "primary" : "secondary"} onClick={() => setType(ContentType.Twitter)} />
+                                <Button text="Documents" variant={type == ContentType.Documents ? "primary" : "secondary"} onClick={() => setType(ContentType.Documents)} />
+                                <Button text="Links" variant={type == ContentType.Links ? "primary" : "secondary"} onClick={() => setType(ContentType.Links)} />
                             </div>
                             <div className="flex justify-center">
                                 <Button variant="primary" text="Submit" onClick={contentModel} loading={false} />
