@@ -13,12 +13,13 @@ interface ContentItem {
   _id: string;
   title: string;
   link: string;
-  type: "tweets" | "videos" | "documents" | "links"
+  type: "tweets" | "videos" | "documents" | "links";
 }
 
-export function DashBoard({ isShared = false }: { isShared?: boolean }) {
+export function DashBoard({ isShared = false, sideItemType }: { isShared?: boolean; sideItemType: string }) {
   const [modelOpen, setModelOpen] = useState(false);
   const [contents, setContents] = useState<ContentItem[]>([]);
+  const [selectedItem, setSelectedItem] = useState(sideItemType); 
   const { hash } = useParams();
 
   useEffect(() => {
@@ -30,8 +31,8 @@ export function DashBoard({ isShared = false }: { isShared?: boolean }) {
         } else {
           response = await axios.get(`${BACKEND_URL}/api/v1/content`, {
             headers: {
-              Authorization: localStorage.getItem("token")
-            }
+              Authorization: localStorage.getItem("token"),
+            },
           });
         }
         setContents(response.data.content);
@@ -42,26 +43,35 @@ export function DashBoard({ isShared = false }: { isShared?: boolean }) {
     fetchContent();
   }, [isShared, hash, modelOpen]);
 
+  // Update selected item when sideItemType prop changes (e.g., on route change)
+  useEffect(() => {
+    setSelectedItem(sideItemType);
+  }, [sideItemType]);
+
+  const handleSidebarItemClick = (item: string) => {
+    setSelectedItem(item.toLowerCase());
+  };
+
   const handleDelete = async (_id: string) => {
     await axios.delete(`${BACKEND_URL}/api/v1/content`, {
       headers: {
-        "Authorization": localStorage.getItem("token")
+        Authorization: localStorage.getItem("token"),
       },
       data: {
-        contentId: _id
-      }
-    })
-    setContents(prev => prev.filter(content => content._id !== _id));
-  }
-
+        contentId: _id,
+      },
+    });
+    setContents((prev) => prev.filter((content) => content._id !== _id));
+  };
 
   const handleShareBrain = async () => {
-    const response = await axios.post(`${BACKEND_URL}/api/v1/brain/share`,
+    const response = await axios.post(
+      `${BACKEND_URL}/api/v1/brain/share`,
       { share: true },
       {
         headers: {
-          "Authorization": localStorage.getItem("token")
-        }
+          Authorization: localStorage.getItem("token"),
+        },
       }
     );
     const shareUrl = `${window.location.origin}/${response.data.hash}`;
@@ -71,7 +81,7 @@ export function DashBoard({ isShared = false }: { isShared?: boolean }) {
 
   return (
     <div>
-      <SideBar />
+      <SideBar selectedItem={selectedItem} onItemClick={handleSidebarItemClick} />
       <div className="p-4 ml-76 min-h-screen bg-gray-100">
         {!isShared && (
           <>
@@ -81,7 +91,7 @@ export function DashBoard({ isShared = false }: { isShared?: boolean }) {
                 variant="primary"
                 text="Add Content"
                 StartIcon={<PlusIcon />}
-                onClick={() => setModelOpen(true)} // Just open modal
+                onClick={() => setModelOpen(true)}
               />
               <Button
                 variant="secondary"
@@ -94,16 +104,18 @@ export function DashBoard({ isShared = false }: { isShared?: boolean }) {
         )}
 
         <div className="flex gap-4 flex-wrap">
-          {contents.map(({ _id, title, link, type }) => (
-            <Card
-              key={_id}
-              _id={_id}
-              type={type}
-              link={link}
-              title={title}
-              onDelete={handleDelete}
-            />
-          ))}
+          {contents
+            .filter(({ type }) => type === selectedItem) // Filter by selected sidebar item
+            .map(({ _id, title, link, type }) => (
+              <Card
+                key={_id}
+                _id={_id}
+                type={type}
+                link={link}
+                title={title}
+                onDelete={handleDelete}
+              />
+            ))}
         </div>
       </div>
     </div>

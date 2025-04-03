@@ -3,6 +3,7 @@ import { ShareIcon } from "../icons/ShareIcon"
 import { DeleteIcon } from "../icons/DeleteIcon"
 import { FileIcon } from "../icons/FileIcon"
 import TwitterEmbedBasic from "./tweetEmbed"
+import {  GoogleDocViewer } from "./Docs"
 
 interface CardProps {
     _id: string
@@ -49,6 +50,8 @@ export const Card = (Props: CardProps) => {
                      tweetUrl={Props.link} 
                      className="my-tweet-embed"
                    />}
+                   {/* Google DOCS */}
+                   {Props.type === "documents" && <GoogleDocViewer docId= {Props.link}  />}
                 </div>
                     
             </div>
