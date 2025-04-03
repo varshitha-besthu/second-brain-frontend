@@ -4,6 +4,7 @@ import { DeleteIcon } from "../icons/DeleteIcon"
 import { FileIcon } from "../icons/FileIcon"
 import TwitterEmbedBasic from "./tweetEmbed"
 import {  GoogleDocViewer } from "./Docs"
+import { LinkRender } from "./LinkRender"
 
 interface CardProps {
     _id: string
@@ -52,6 +53,8 @@ export const Card = (Props: CardProps) => {
                    />}
                    {/* Google DOCS */}
                    {Props.type === "documents" && <GoogleDocViewer docId= {Props.link}  />}
+                   {/* Links */}
+                   {Props.type === "links" && <LinkRender link={Props.link} title={Props.title} />}
                 </div>
                     
             </div>
