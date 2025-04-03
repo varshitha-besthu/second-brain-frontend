@@ -31,11 +31,11 @@ export const Card = (Props: CardProps) => {
                         {Props.title}
                     </div>
                     <div className="flex items-center text-gray-500">   
-                        <div className="pointer pr-4">
-                            <a href= {Props.link} target = "_blank"></a>
-                            <ShareIcon />
+                        <div className="cursor-pointer pr-4">
+                            <a href= {Props.link} target = "_blank"><ShareIcon /></a>
+                            
                         </div>
-                        <div onClick = {handleDeleteClick} className="pointer">
+                        <div onClick = {handleDeleteClick} className="cursor-pointer">
                             <DeleteIcon />
                         </div>
 

@@ -5,7 +5,8 @@ interface ButtonProps {
     StartIcon?: ReactElement,
     onClick?: () => void,
     fullWidth?: boolean,
-    loading?: boolean
+    loading?: boolean,
+    ref ?: any
 }
 const ButtonPropsStyle = {
     "primary": "bg-purple-600 text-white",
@@ -14,7 +15,7 @@ const ButtonPropsStyle = {
 const DefaultStyles = "px-4 py-2 rounded-md font-light flex justify-center items-center cursor-pointer"
 export function Button(props: ButtonProps) {
     return (
-        <button className={ButtonPropsStyle[props.variant] + " " + DefaultStyles + " " + `${props.fullWidth ? "w-full text-center" : ""}` + " " + `${props.loading ? "opacity-60" : ""}`} disabled = {props.loading} onClick={props.onClick}>
+        <button className={ButtonPropsStyle[props.variant] + " " + DefaultStyles + " " + `${props.fullWidth ? "w-full text-center" : ""}` + " " + `${props.loading ? "opacity-60" : ""}`} disabled = {props.loading} onClick={props.onClick} ref={props.ref}>
             <div className="pr-2">
                 {props.StartIcon}
             </div>

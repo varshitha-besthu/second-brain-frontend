@@ -8,7 +8,7 @@ export const SignIn = () => {
     const navigate = useNavigate();
     const usernameRef = useRef<HTMLInputElement | null>(null);
     const passwordRef = useRef<HTMLInputElement | null>(null);
-
+    const submitRef = useRef<HTMLInputElement | null>(null);
     async function signin(){
         const username = usernameRef.current?.value;
         const password = passwordRef.current?.value;
@@ -20,12 +20,18 @@ export const SignIn = () => {
         localStorage.setItem("token" , response.data.token);
         navigate("/dashboard");
     }
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement> | React.KeyboardEvent<HTMLDivElement>, nextInputRef: React.RefObject<HTMLInputElement>) => {
+        if(e.key == "Enter"){
+            e.preventDefault();
+            nextInputRef.current.focus();
+        }
+    }
     return <div className="h-screen w-screen  bg-gray-200 flex justify-center items-center ">
         <div className="bg-white roundedborder min-w-48 p-8 rounded-xl ">
-            <Input placeholder = "Username" ref={usernameRef}/>
-            <Input placeholder = "Password" ref={passwordRef}/>
+        <Input placeholder = "Username" ref = {usernameRef} handleKeyDown={handleKeyDown} nextRef={passwordRef}/>
+        <Input placeholder = "Password" ref = {passwordRef}  handleKeyDown={handleKeyDown} nextRef={submitRef}/>
             <div className="flex justify-center pt-4">
-                <Button loading = {false} variant="primary" text="signin" fullWidth = {true} onClick={signin}/>
+            <Button loading = {false} variant="primary" text="signup" fullWidth = {true} onClick={signin} ref = {submitRef}/>
             </div>
         </div>
     </div>

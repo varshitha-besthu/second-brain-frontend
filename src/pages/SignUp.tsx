@@ -6,8 +6,9 @@ import { BACKEND_URL } from "../config"
 import { useNavigate } from "react-router-dom"
 
 export const SignUp = () => {
-    const usernameRef = useRef<HTMLInputElement | null>(null);
-    const passwordRef = useRef<HTMLInputElement | null>(null);
+    const usernameRef = useRef<HTMLInputElement >(null);
+    const passwordRef = useRef<HTMLInputElement >(null);
+    const submitRef = useRef<HTMLInputElement>(null);
     const navigate = useNavigate();
 
     async function signup(){
@@ -19,15 +20,20 @@ export const SignUp = () => {
             }
         )
         navigate("/signin")
-
+    }
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement> | React.KeyboardEvent<HTMLDivElement>, nextInputRef: React.RefObject<HTMLInputElement>) => {
+        if(e.key == "Enter"){
+            e.preventDefault();
+            nextInputRef.current.focus();
+        }
     }
     return <div className="h-screen w-screen  bg-gray-200 flex justify-center items-center ">
         <div className="bg-white roundedborder min-w-48 p-8 rounded-xl ">
             <div className="text-xl font-bold ">Sign up : </div>
-            <Input placeholder = "Username" ref = {usernameRef}/>
-            <Input placeholder = "Password" ref = {passwordRef} />
+                <Input placeholder = "Username" ref = {usernameRef} handleKeyDown={handleKeyDown} nextRef={passwordRef}/>
+                <Input placeholder = "Password" ref = {passwordRef}  handleKeyDown={handleKeyDown} nextRef={submitRef}/>
             <div className="flex justify-center pt-4">
-                <Button loading = {false} variant="primary" text="signup" fullWidth = {true} onClick={signup}/>
+                <Button loading = {false} variant="primary" text="signup" fullWidth = {true} onClick={signup} ref = {submitRef}/>
             </div>
         </div>
     </div>
