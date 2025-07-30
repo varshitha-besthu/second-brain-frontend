@@ -4,6 +4,7 @@ import { Button } from "./Button"
 import { Input } from "./Input"
 import axios from "axios"
 import { BACKEND_URL } from "../config"
+import { useOutsideClick } from "../hooks/useOutsideClick"
 
 enum ContentType {
     Youtube = "videos",
@@ -15,9 +16,20 @@ export const CreateContentModel = ({ open, onClose } : {open : any, onClose: any
     const titleRef = useRef<HTMLInputElement | null>(null);
     const linkRef = useRef<HTMLInputElement | null>(null);
     const tagsRef = useRef<HTMLInputElement | null>(null);
+    
+    const dropdownRef = useRef<HTMLDivElement| null>(null);
+
+    useOutsideClick(dropdownRef, () => {
+        onClose();
+    });
 
     const [type, setType] = useState(ContentType.Youtube);
 
+    const handleKeyDown = (e:React.KeyboardEvent<HTMLInputElement>, nextInputRef: React.RefObject<HTMLInputElement> ) => {
+          if (e.key === "Enter" || e.key === "ArrowDown") {
+                nextInputRef.current?.focus();
+        }
+    }
     async function contentModel() {
         const title = titleRef.current?.value;
         const link = linkRef.current?.value;
@@ -44,13 +56,13 @@ export const CreateContentModel = ({ open, onClose } : {open : any, onClose: any
                 <div className="w-screen h-screen fixed top-0 left-0 bg-black opacity-60 flex justify-center">
                 </div>
                 <div className="w-screen h-screen fixed top-0 left-0  flex justify-center trasparent">
-                    <div className="flex flex-col justify-center">
+                    <div className="flex flex-col justify-center" ref={dropdownRef}>
                         <span className="bg-white opacity-100 p-4 rounded ">
                             <div className="flex justify-end cursor-pointer" onClick={onClose}>
                                 <CrossIcon />
                             </div>
                             <div>
-                                <Input placeholder={"Title"} ref={titleRef} />
+                                <Input placeholder={"Title"} ref={titleRef} nextRef = {linkRef} />
                                 <Input placeholder={"Link"} ref={linkRef} />
                                 <Input placeholder="Enter tags by comma seperated value" ref={tagsRef} />
                             </div>

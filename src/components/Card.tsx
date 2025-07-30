@@ -22,7 +22,7 @@ export const Card = (Props: CardProps) => {
     }
     return(
         <div >
-            <div className="p-4 border bg-white rounded-md border-gray-200 max-w-72 min-h-48 min-w-72">
+            <div className="p-4 border bg-white rounded-md border-gray-200  min-h-48 min-w-72">
                 <div className="flex justify-between">
                     <div className="flex items-center text-sm">
                         <div className="text-gray-500 pr-2">
