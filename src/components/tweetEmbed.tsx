@@ -32,8 +32,8 @@ const TwitterEmbedBasic = ({ tweetUrl, className }: TwitterEmbedBasicProps) => {
   const normalizedUrl = tweetUrl.replace(/x\.com\//, 'twitter.com/');
 
   return (
-    <div className={className}>
-      <blockquote className="twitter-tweet">
+    <div className="my-tweet-embed">
+      <blockquote className="twitter-tweet bg-red-400">
         <a href={normalizedUrl}></a>
       </blockquote>
     </div>

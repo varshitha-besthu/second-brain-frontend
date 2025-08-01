@@ -21,8 +21,8 @@ export const Card = (Props: CardProps) => {
         }
     }
     return(
-        <div >
-            <div className="p-4 border bg-white rounded-md border-gray-200  min-h-48 min-w-72">
+        <div className="mt-8 mr-4">
+            <div className="px-4 pt-4 border bg-white rounded-md border-gray-200 dark:border-neutral-700 min-h-48 min-w-72  dark:bg-black dark:text-white">
                 <div className="flex justify-between">
                     <div className="flex items-center text-sm">
                         <div className="text-gray-500 pr-2">
@@ -41,7 +41,7 @@ export const Card = (Props: CardProps) => {
 
                     </div>
                 </div>
-                <div className="pt-4 ">
+                <div className="p-4 ">
                     {/* YOUTUBE VIDEO */}
                     {Props.type === "videos" && 
                     <iframe  className = "w-full" src={Props.link.replace("watch","embed").replace("?v=","/")} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe> }
@@ -49,7 +49,6 @@ export const Card = (Props: CardProps) => {
                     {Props.type === "tweets" && 
                      <TwitterEmbedBasic
                      tweetUrl={Props.link} 
-                     className="my-tweet-embed"
                    />}
                    {/* Google DOCS */}
                    {Props.type === "documents" && <GoogleDocViewer docId= {Props.link}  />}

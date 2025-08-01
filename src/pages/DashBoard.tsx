@@ -8,7 +8,9 @@ import { Button } from "../components/Button";
 import { PlusIcon } from "../icons/PlusIcon";
 import { ShareIcon } from "../icons/ShareIcon";
 import { Card } from "../components/Card";
-import { SearchPage } from "../components/SearchByTagName";
+import { ModeChange } from "../components/modeChange";
+import { useRecoilValue } from "recoil";
+import { themeAtom } from "../Atoms/themeAtom";
 
 interface ContentItem {
   _id: string;
@@ -21,13 +23,19 @@ export function DashBoard({ isShared = false, sideItemType }: { isShared?: boole
   const [modelOpen, setModelOpen] = useState(false);
   const [contents, setContents] = useState<ContentItem[]>([]);
   const [selectedItem, setSelectedItem] = useState(sideItemType); 
-  const [searchOpen, setSearchOpen] = useState(false);
   const [tagName, setTagName] = useState("");
   const { hash } = useParams();
+  const theme = useRecoilValue(themeAtom);
+
+  useEffect(() => {
+    console.log("Theme Changed", theme);
+  },[theme])
 
   useEffect(() => {
     const fetchContent = async () => {
       try {
+
+        console.log("tagName: ", tagName);
         let response ;
         if (isShared && hash) {
           response = await axios.get(`${BACKEND_URL}/api/v1/brain/${hash}`);
@@ -58,13 +66,20 @@ export function DashBoard({ isShared = false, sideItemType }: { isShared?: boole
         console.error("Error fetching content:", error);
       }
     };
-    fetchContent();
+    const timer = setTimeout(() => {
+      fetchContent();
+    }, 500);
+
+    return () => clearTimeout(timer);
+
+
   }, [isShared, hash, modelOpen,tagName]);
 
   
   useEffect(() => {
     setSelectedItem(sideItemType);
   }, [sideItemType]);
+
 
   const handleSidebarItemClick = (item: string) => {
     setSelectedItem(item.toLowerCase());
@@ -100,48 +115,43 @@ export function DashBoard({ isShared = false, sideItemType }: { isShared?: boole
   //@ts-ignore
   const handleOnChange = async(e) => {
     setTagName(e.target.value);
-    console.log(typeof(tagName))
   }
 
   return (
-    <div>
+
+    <div data-theme= {theme}>
       <SideBar selectedItem={selectedItem} onItemClick={handleSidebarItemClick} />
 
-      <div className="p-4 ml-76 min-h-screen bg-gray-100">
+      <div className="p-4 ml-76 min-h-screen bg-gray-100 dark:bg-black ">
         {!isShared && (
           <>
             <CreateContentModel open={modelOpen} onClose={() => setModelOpen(false)} />
-            <SearchPage open={searchOpen} onClose={() => setSearchOpen(false)}/>
-            
             <div className="relative flex justify-end gap-4 p-4 ml-76">
+              
               <div>
-                <input type="text" placeholder={`Search in ${selectedItem}`} className="border border-black-300 w-[500px] px-4 py-2 rounded-xl" onChange={handleOnChange}/>
+                <input type="text" placeholder={`Search in ${selectedItem}`} className="border border-black-300 w-[500px] px-4 py-2 rounded-xl dark:border-neutral-600 dark:text-white" onChange={handleOnChange}/>
               </div>
+
               <Button
-                variant="primary"
+                variant="dark"
                 text="Add Content"
                 StartIcon={<PlusIcon />}
                 onClick={() => setModelOpen(true)}
               />
-              {/* <Button 
-                variant="primary"
-                text="search by tagName"
-                StartIcon={<SearchIcon />}
-                onClick={() => setSearchOpen(true)}
-              /> */}
               <Button
-                variant="secondary"
+                variant="dark-light"
                 text="Share Brain"
                 StartIcon={<ShareIcon />}
                 onClick={handleShareBrain}
               />
+              <ModeChange />
             </div>
           </>
         )}
 
         <div className="flex gap-4 flex-wrap">
           {contents
-            .filter(({ type }) => type === selectedItem) // Filter by selected sidebar item
+            .filter(({ type }) => type === selectedItem) 
             .map(({ _id, title, link, type }) => (
               <Card
                 key={_id}

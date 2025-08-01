@@ -25,11 +25,7 @@ export const CreateContentModel = ({ open, onClose } : {open : any, onClose: any
 
     const [type, setType] = useState(ContentType.Youtube);
 
-    const handleKeyDown = (e:React.KeyboardEvent<HTMLInputElement>, nextInputRef: React.RefObject<HTMLInputElement> ) => {
-          if (e.key === "Enter" || e.key === "ArrowDown") {
-                nextInputRef.current?.focus();
-        }
-    }
+   
     async function contentModel() {
         const title = titleRef.current?.value;
         const link = linkRef.current?.value;
@@ -37,8 +33,8 @@ export const CreateContentModel = ({ open, onClose } : {open : any, onClose: any
         const tagArray = tags?.map(tag => ({"tagName" : tag} ));
         console.log(tags);
         await axios.post(`${BACKEND_URL}/api/v1/content`, {
-            title,
-            link,
+            title : title,
+            link : link,
             tags : tagArray,
             type : type,
             
@@ -62,7 +58,7 @@ export const CreateContentModel = ({ open, onClose } : {open : any, onClose: any
                                 <CrossIcon />
                             </div>
                             <div>
-                                <Input placeholder={"Title"} ref={titleRef} nextRef = {linkRef} />
+                                <Input placeholder={"Title"} ref={titleRef}  />
                                 <Input placeholder={"Link"} ref={linkRef} />
                                 <Input placeholder="Enter tags by comma seperated value" ref={tagsRef} />
                             </div>

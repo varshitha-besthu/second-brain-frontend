@@ -12,7 +12,7 @@ interface SideBarProps {
 
 export const SideBar = ({ selectedItem, onItemClick }: SideBarProps) => {
   return (
-    <div className="fixed h-screen bg-white border-2 border-gray-100 w-76 left-0 top-0 pl-6">
+    <div className="fixed h-screen bg-white  w-76 left-0 top-0 pl-6 dark:bg-neutral-900 dark:text-white">
       <div className="flex text-2xl pt-8 items-center gap-2">
         <div className="text-purple-600">
           <Logo />

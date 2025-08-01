@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 interface ButtonProps {
-    variant: "primary" | "secondary",
+    variant: "primary" | "secondary" | "dark" | "dark-light",
     text: string,
     StartIcon?: ReactElement,
     onClick?: () => void,
@@ -10,7 +10,9 @@ interface ButtonProps {
 }
 const ButtonPropsStyle = {
     "primary": "bg-purple-600 text-white",
-    "secondary": "bg-purple-200 text-purple-600"
+    "secondary": "bg-purple-200 text-purple-600",
+    "dark":"bg-purple-600 text-black",
+    "dark-light" : "bg-purple-200 text-black"
 }
 const DefaultStyles = "px-4 py-2 rounded-md font-light flex justify-center items-center cursor-pointer"
 export function Button(props: ButtonProps) {
